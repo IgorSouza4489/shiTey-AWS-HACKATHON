@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: genai_api
+    ports:
+      - "8000:8000"
+    environment:
+      - AWS_REGION=us-east-1
+    networks:
+      - genai_net
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: genai_ui
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    networks:
+      - genai_net
+
+networks:
+  genai_net:
+    driver: bridge
